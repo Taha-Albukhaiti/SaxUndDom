@@ -2,6 +2,7 @@ package dom;
 
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
+
 import javax.xml.transform.*;
 import java.io.*;
 import java.util.*;
@@ -185,7 +186,7 @@ public class MainDom {
         try {
             XPath xpath = XPathFactory.newInstance().newXPath();
 
-            String expression = "//Kontakt";        //Elternknoten ermitteln
+            String expression = "//Adressbuch";        //Elternknoten ermitteln
             adresse = (Node) xpath.evaluate(expression, doc, XPathConstants.NODE);
 
             //expression = "(//Schulungen/*[@nummer > " + kursdaten[0] + "])[1]";
@@ -204,6 +205,36 @@ public class MainDom {
     public static void updateElement(String landName) {
 
         NodeList alterInhalt = doc.getChildNodes();
+        for (int i = 0; i < alterInhalt.getLength(); i++) {
+            System.out.println("asd");
+            Node node = alterInhalt.item(i);
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                NodeList nodeList = node.getChildNodes();
+                for (int j = 0; j < nodeList.getLength(); j++) {
+                    Node innerNode = nodeList.item(j);
+                    if (innerNode.getNodeType() == Node.ELEMENT_NODE) {
+                        NodeList innerinnerElements = innerNode.getChildNodes();
+                        for (int k = 0; k < innerinnerElements.getLength(); k++) {
+                            Node innerinnerNode = innerinnerElements.item(k);
+                            if (innerinnerNode.getNodeType() == Node.ELEMENT_NODE) {
+                                Element landElement = (Element) innerinnerNode;
+                                System.out.println("+++++ " + landElement.getTextContent());
+                                if (landElement.getTagName().equals("Land"))
+                                    if (landElement.getTextContent().equals("Frankreich")) {
+                                        System.out.println("asd4");
+                                        Text neuerInhalt = doc.createTextNode(landName);
+
+                                        landElement.replaceChild(neuerInhalt, (Node) landElement);
+                                        innerinnerElements.item(j).replaceChild(neuerInhalt, (Node) landElement);
+                                    }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+      /*
         //for (int x = 0; x < list.getLength(); x++) {
         //  Node alterInhalt = list.item(x);
         //if (alterInhalt.getNodeValue().equals("Tast"))
@@ -215,21 +246,21 @@ public class MainDom {
             Node alterNodeInhalt = alterInhalt.item(j);
             if (alterNodeInhalt.getNodeType() == Node.ELEMENT_NODE) {
                 Element neueElement = (Element) alterNodeInhalt;
-                if (neueElement.getTagName().equals("Land")) {
-                    if (neueElement.getTextContent().equals("Deutschland")) {
-                       // if (neueElement.getTagName().equals("Land")) {
-                            Text neuerInhalt = doc.createTextNode(landName);
-                            neueElement.replaceChild(neuerInhalt, alterNodeInhalt);
-                            alterInhalt.item(j).replaceChild(neuerInhalt, alterNodeInhalt);
-                       // }
-                    }
+                //if (neueElement.getTagName().equals("Land")) {
+                if (neueElement.getTextContent().equals("Frankreich")) {
+                    // if (neueElement.getTagName().equals("Land")) {
+                    Text neuerInhalt = doc.createTextNode(landName);
+                    neueElement.replaceChild(neuerInhalt, alterNodeInhalt);
+                    alterInhalt.item(j).replaceChild(neuerInhalt, alterNodeInhalt);
+                    // }
                 }
+                //}
             }
         }
     }
     //}
     //   }
-    //}
+       */
 
     public static void xmlSchreiben() {
         TransformerFactory transFactory = TransformerFactory.newInstance();

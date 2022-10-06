@@ -28,7 +28,7 @@
         <Land>Deutschland</Land>
     </Kontakt>
 
-    <Kontakt typ="geschaeftlich">
+    <Kontakt typ="2">
         <Vorname>Mark</Vorname>
         <Nachname>Schmiedt</Nachname>
         <Strasse>Holala 3</Strasse>
