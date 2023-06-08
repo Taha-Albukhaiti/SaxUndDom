@@ -30,7 +30,9 @@ public class MainDom {
         if (args.length != 1) {
             System.out.println("Dateiname eingeben!! ");
         }
+
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
         try {
             DocumentBuilder documentBuilder = factory.newDocumentBuilder();
             doc = documentBuilder.parse(args[0]);
@@ -39,7 +41,8 @@ public class MainDom {
             //in diesem Beispiel soll an einer bestimmten Stelle eingefuegt werden, daher eigene Methode hierfuer
             kursElementEinbinden(doc, neuAdresse);
 
-            updateElement("USA");
+            updateElement("USA", "Frankreich");
+
             xmlSchreiben();
 
             documentAusgeben(doc);
@@ -201,7 +204,16 @@ public class MainDom {
         }
     }
 
-
+    public static void updateElement(String landName, String alterName) {
+        NodeList alterInhalt = doc.getElementsByTagName("Land");
+        for (int i = 0; i < alterInhalt.getLength(); i++) {
+            Node landElement = alterInhalt.item(i);
+            if (landElement.getTextContent().equals(alterName)) {
+                landElement.setTextContent(landName);
+            }
+        }
+    }
+/*
     public static void updateElement(String landName) {
 
         NodeList alterInhalt = doc.getChildNodes();
@@ -234,33 +246,8 @@ public class MainDom {
             }
         }
     }
-      /*
-        //for (int x = 0; x < list.getLength(); x++) {
-        //  Node alterInhalt = list.item(x);
-        //if (alterInhalt.getNodeValue().equals("Tast"))
-        // if (alterInhalt.getNodeType() == Node.ELEMENT_NODE) {
-        //  Element element = (Element) alterInhalt;
-        //if (element.getAttribute("Typ").equals("privat")) {
-        //  NodeList nodeList = element.getChildNodes();
-        for (int j = 0; j < alterInhalt.getLength(); j++) {
-            Node alterNodeInhalt = alterInhalt.item(j);
-            if (alterNodeInhalt.getNodeType() == Node.ELEMENT_NODE) {
-                Element neueElement = (Element) alterNodeInhalt;
-                //if (neueElement.getTagName().equals("Land")) {
-                if (neueElement.getTextContent().equals("Frankreich")) {
-                    // if (neueElement.getTagName().equals("Land")) {
-                    Text neuerInhalt = doc.createTextNode(landName);
-                    neueElement.replaceChild(neuerInhalt, alterNodeInhalt);
-                    alterInhalt.item(j).replaceChild(neuerInhalt, alterNodeInhalt);
-                    // }
-                }
-                //}
-            }
-        }
-    }
-    //}
-    //   }
-       */
+
+ */
 
     public static void xmlSchreiben() {
         TransformerFactory transFactory = TransformerFactory.newInstance();
